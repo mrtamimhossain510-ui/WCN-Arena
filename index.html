@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b10">
+<title>WCN ARENA | Tournament Hub</title>
+<style>
+:root{--bg:#090a10;--panel:#13151f;--line:#282b3b;--red:#ff3548;--muted:#9da3b8;--white:#f7f8ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:system-ui,-apple-system,sans-serif}
+button,a{font:inherit}
+header{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0b0c12ed;backdrop-filter:blur(12px);z-index:5}
+.brand{font-size:21px;font-weight:900;letter-spacing:1px}.brand span{color:var(--red)}
+.pill{border:1px solid #40303a;color:#ff8190;border-radius:20px;padding:6px 10px;font-size:11px}
+main{max-width:1100px;margin:auto;padding:25px 18px 60px}
+.hero{padding:30px 23px;border:1px solid #43212d;border-radius:22px;background:radial-gradient(ellipse at 90% 0%,#6e172d66,transparent 48%),linear-gradient(135deg,#19131e,#10121b 65%);overflow:hidden}
+.eyebrow{color:#ff7586;font-size:11px;font-weight:800;letter-spacing:2px}
+h1{font-size:clamp(38px,8vw,65px);line-height:1.02;margin:15px 0}
+h1 span{color:var(--red)}.hero p{color:#c0c3d2;max-width:480px;line-height:1.7;font-size:14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{border:1px solid var(--line);border-radius:10px;padding:11px 15px;color:white;background:#1b1d29;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--red);border-color:var(--red);font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 28px}
+.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat strong{display:block;font-size:25px}.stat small,.muted{color:var(--muted)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:28px 0 15px}
+h2{font-size:19px;margin:0}.section-head small{color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filter{background:transparent;color:#c6cada;border:1px solid var(--line);padding:8px 13px;border-radius:30px;cursor:pointer}
+.filter.active{background:#3a1722;color:#ff8b99;border-color:#783041}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{font-size:10px;color:#ff9aa5;background:#381822;padding:5px 8px;border-radius:6px}
+.card h3{margin:15px 0 7px;font-size:19px}.card p{font-size:13px;color:var(--muted);line-height:1.6}
+.card .btn{display:inline-block;margin-top:8px;font-size:13px}
+.notice{padding:18px;border:1px dashed #41445a;border-radius:12px;color:var(--muted);line-height:1.7;font-size:13px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:13px}
+th,td{text-align:left;padding:13px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);background:#171925}
+footer{text-align:center;border-top:1px solid var(--line);padding:25px 15px;color:var(--muted);font-size:12px}
+input{background:#0c0d14;color:white;border:1px solid var(--line);border-radius:8px;padding:11px;width:100%;margin:5px 0 12px}
+@media(max-width:560px){header{padding:0 16px}.grid{grid-template-columns:1fr}main{padding:18px 13px 45px}.hero{padding:26px 18px}.stats{gap:7px}.stat{padding:12px 9px}.stat strong{font-size:21px}.stat small{font-size:10px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">WCN <span>ARENA</span></div>
+  <div class="pill">● TOURNAMENT HUB</div>
+</header>
+<main>
+  <section class="hero">
+    <div class="eyebrow">WORLD COR NATION PRESENTS</div>
+    <h1>ENTER THE<br><span>ARENA.</span></h1>
+    <p>Your home for competitive gaming. Explore tournaments, follow teams, track scores and discover champions — all in one place.</p>
+    <div class="actions">
+      <a class="btn primary" href="#tournaments">Explore tournaments ↗</a>
+      <a class="btn" href="#leaderboard">Leaderboard ↓</a>
+    </div>
+  </section>
+  <section class="stats">
+    <div class="stat"><strong id="count">0</strong><small>Tournaments</small></div>
+    <div class="stat"><strong id="teams">0</strong><small>Teams listed</small></div>
+    <div class="stat"><strong id="matches">0</strong><small>Matches recorded</small></div>
+  </section>
+  <section id="tournaments">
+    <div class="section-head"><h2>⚔ Tournaments</h2><small>WCN EVENTS</small></div>
+    <div class="filters">
+      <button class="filter active" data-filter="All">All</button>
+      <button class="filter" data-filter="Ongoing">Ongoing</button>
+      <button class="filter" data-filter="Upcoming">Upcoming</button>
+      <button class="filter" data-filter="Completed">Completed</button>
+    </div>
+    <div class="grid" id="tournamentGrid">
+      <div class="notice">Loading tournament data…</div>
+    </div>
+  </section>
+  <section id="leaderboard">
+    <div class="section-head"><h2>🏆 Leaderboard</h2><small>TOP TEAMS</small></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>Team</th><th>Tournament</th><th>Points</th></tr></thead><tbody id="ranking"><tr><td colspan="4">Waiting for tournament data…</td></tr></tbody></table></div>
+  </section>
+  <section id="about">
+    <div class="section-head"><h2>🌐 About WCN ARENA</h2></div>
+    <div class="notice">WCN ARENA is a multi-tournament platform by World Cor Nation. Tournament information will appear here when the organizer connects the Google Sheets database.</div>
+  </section>
+</main>
+<footer>© <span id="year"></span> WCN ARENA · WORLD COR NATION<br>Built for the competitive community.</footer>
+<script>
+const SHEET_API_URL = "";
+let tournaments = [];
+let teams = [];
+let selectedFilter = "All";
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+function renderTournaments(){
+  const list = tournaments.filter(t => selectedFilter === "All" || (t.status || "").toLowerCase() === selectedFilter.toLowerCase());
+  const grid = document.getElementById("tournamentGrid");
+  if(!list.length){
+    grid.innerHTML = '<div class="notice">No tournaments added yet. Connect your Google Sheets database to publish events here.</div>';
+    return;
+  }
+  grid.innerHTML = list.map(t => `
+    <article class="card">
+      <div class="card-top"><span class="tag">${escapeHTML(t.status || "Tournament")}</span><span class="muted">${escapeHTML(t.date || "")}</span></div>
+      <h3>${escapeHTML(t.name || "WCN Tournament")}</h3>
+      <p>${escapeHTML(t.description || "Official WCN ARENA event")}</p>
+      <p>🎮 ${escapeHTML(t.game || "Gaming")} · ${escapeHTML(t.teams || "TBA")} teams</p>
+      <button class="btn" onclick="showTournament('${escapeJS(t.id || t.name || "")}')">View details ↗</button>
+    </article>`).join("");
+}
+function renderTeams(){
+  const body = document.getElementById("ranking");
+  if(!teams.length){
+    body.innerHTML = '<tr><td colspan="4">No team scores published yet.</td></tr>';
+    return;
+  }
+  const sorted = [...teams].sort((a,b) => Number(b.points || 0) - Number(a.points || 0));
+  body.innerHTML = sorted.map((t,i)=>`<tr><td>${i+1}</td><td><b>${escapeHTML(t.name || "")}</b></td><td>${escapeHTML(t.tournament || "")}</td><td>${Number(t.points || 0)}</td></tr>`).join("");
+}
+function showTournament(id){
+  const t = tournaments.find(x => String(x.id || x.name) === id);
+  if(t) alert(t.name + "\nStatus: " + (t.status || "TBA") + "\nDate: " + (t.date || "TBA") + "\n" + (t.description || ""));
+}
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function escapeJS(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
+document.querySelectorAll(".filter").forEach(btn=>btn.addEventListener("click",()=>{
+  selectedFilter = btn.dataset.filter;
+  document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b===btn));
+  renderTournaments();
+}));
+async function loadData(){
+  if(!SHEET_API_URL){
+    renderTournaments();renderTeams();
+    document.getElementById("count").textContent = "0";
+    document.getElementById("teams").textContent = "0";
+    document.getElementById("matches").textContent = "0";
+    return;
+  }
+  try{
+    const response = await fetch(SHEET_API_URL);
+    if(!response.ok) throw new Error("Could not load data");
+    const data = await response.json();
+    tournaments = Array.isArray(data.tournaments) ? data.tournaments : [];
+    teams = Array.isArray(data.teams) ? data.teams : [];
+    document.getElementById("count").textContent = tournaments.length;
+    document.getElementById("teams").textContent = teams.length;
+    document.getElementById("matches").textContent = Array.isArray(data.matches) ? data.matches.length : 0;
+    renderTournaments();renderTeams();
+  }catch(e){
+    document.getElementById("tournamentGrid").innerHTML = '<div class="notice">Could not load live data. Please check the Google Sheets connection.</div>';
+    renderTeams();
+  }
+}
+loadData();
+</script>
+</body>
+</html>
